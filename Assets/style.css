@@ -1,6 +1,9 @@
 body{
     background-color: silver;
 }
+#e{
+    color: rgb(245, 235, 98) !important;
+}
 
 button{
     margin: 1rem;

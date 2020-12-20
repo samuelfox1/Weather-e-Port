@@ -2,6 +2,9 @@ body{
     background-color: silver;
 }
 
+button{
+    margin: 1rem;
+}
 .city-info {
     padding: 15px 
 }

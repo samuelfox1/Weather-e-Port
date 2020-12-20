@@ -2,10 +2,10 @@
 $(document).ready(function () {
 
     console.log('linked!')
-    var userInput = ''
+    var userInput = 'Tacoma, Washington'
     var btnBox = $('.button-box')
     var search = $('.search')
-    var searchHistory = ['Tacoma, Washington', 'Seattle, Washington', 'Hawaii', 'Anaheim, California']
+    var searchHistory = ['Tacoma, Washington', 'Seattle, Washington', 'Honolulu, Hawaii', 'Anaheim, California']
 
     var curCity = $('#city-name')
     var curTemp = $('#current-temp')
@@ -65,9 +65,11 @@ $(document).ready(function () {
     })
 
     $(document).on('click', '.clear', function (event) {
+        event.preventDefault()
         searchHistory.pop()
         loadHistory()
     })
 
+    requestData(userInput)
     loadHistory()
 })

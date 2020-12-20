@@ -72,4 +72,6 @@ $(document).ready(function () {
 
     requestData(userInput)
     loadHistory()
+    console.log(window)
+
 })

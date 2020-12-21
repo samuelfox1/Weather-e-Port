@@ -2,14 +2,12 @@
 $(document).ready(function () {
 
     console.log('linked!')
-    var userInput = 'Tacoma, Washington'
+    var userInput = ''
     var btnBox = $('.button-box')
     var search = $('.search')
     var searchHistory = ['Tacoma, Washington', 'Seattle, Washington', 'Honolulu, Hawaii', 'Anaheim, California']
 
     var APIkey = '5fb601afb9ee3cc974379d932b3c5bea'
-    var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${userInput}&units=imperial&appid=${APIkey}`
-    var queryURL5Day = `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&units=imperial&appid=${APIkey}`
 
     var curCity = $('#city-name')
     var curTemp = $('#current-temp')
@@ -28,6 +26,8 @@ $(document).ready(function () {
 
     // requestData()
     var requestData = function () {
+        var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${userInput}&units=imperial&appid=${APIkey}`
+        var queryURL5Day = `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&units=imperial&appid=${APIkey}`
         var coords = []
 
         $.get(queryURL).then(function (response) {
@@ -99,6 +99,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.history', function (event) {
         userInput = $(this).text()
+        console.log(userInput)
         requestData(userInput)
     })
 
@@ -111,6 +112,5 @@ $(document).ready(function () {
 
     loadHistory()
     buildForecast()
-    requestData(userInput)
 
 })

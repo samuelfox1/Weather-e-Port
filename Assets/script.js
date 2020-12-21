@@ -34,10 +34,10 @@ $(document).ready(function () {
 
             var lat = response.coord.lat
             var lon = response.coord.lon
-            var queryURLuv = `http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${APIkey}`
+            var queryURLuv = `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${APIkey}`
 
             $('#city-header-text').text(userInput)
-            $('#forecast-icon-0').attr('src', `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`)
+            $('#forecast-icon-0').attr('src', `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`)
             $('#forecast-temp-0').text(`Temp: ${response.main.temp} °F`)
             $('#forecast-humidity-0').text(`Humidity: ${response.main.humidity} %`)
             $('#forecast-wind-0').text(`Wind: ${response.wind.speed} mph`)

@@ -7,6 +7,10 @@ $(document).ready(function () {
     var search = $('.search')
     var searchHistory = ['Tacoma, Washington', 'Seattle, Washington', 'Honolulu, Hawaii', 'Anaheim, California']
 
+    var APIkey = '5fb601afb9ee3cc974379d932b3c5bea'
+    var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${userInput}&units=imperial&appid=${APIkey}`
+    var queryURL5Day = `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&units=imperial&appid=${APIkey}`
+
     var curCity = $('#city-name')
     var curTemp = $('#current-temp')
     var curHumidity = $('#current-humidity')
@@ -17,7 +21,7 @@ $(document).ready(function () {
         btnBox.empty()
         if (searchHistory[0] !== null)
             for (let i = 0; i < searchHistory.length; i++) {
-                btnBox.append($(`<button class="btn history" value="${searchHistory[i]}" type="submit">${searchHistory[i]}</button>`))
+                btnBox.append($(`<button class="btn btn-outline-info my-2 my-sm-0 history" value="${searchHistory[i]}" type="submit">${searchHistory[i]}</button>`))
             }
     }
 
@@ -26,25 +30,59 @@ $(document).ready(function () {
     var requestData = function () {
         var coords = []
 
-        var APIkey = '5fb601afb9ee3cc974379d932b3c5bea'
-        var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${userInput}&units=imperial&appid=${APIkey}`
         $.get(queryURL).then(function (response) {
-            console.log(userInput)
-            console.log(response)
-            console.log(response.name)
+
             curCity.text(response.name)
-            curTemp.text(`Temp: ${response.main.temp}°F`)
-            curHumidity.text(`humidity: ${response.main.humidity}%`)
-            curWind.text(`wind: ${response.wind.speed} mph`)
+            curTemp.text(`Temp: ${response.main.temp} °F`)
+            curHumidity.text(`Humidity: ${response.main.humidity} %`)
+            curWind.text(`Wind: ${response.wind.speed} mph`)
+            console.log(response)
 
             var lat = response.coord.lat
             var lon = response.coord.lon
             var queryURLuv = `http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${APIkey}`
             $.get(queryURLuv).then(function (response) {
-                console.log(String(response.value))
                 curUv.text(`uv-index: ${String(response.value)}`)
             })
         })
+        $.get(queryURL5Day).then(function (response) {
+            var x = 2
+
+            for (let i = 1; i < 6; i++) {
+
+                $('#forecast-day-' + i).text(response.list[x].dt_txt)
+                $('#forecast-temp-' + i).text(`Temp: ${response.list[x].main.temp} °F`)
+                $('#forecast-humidity-' + i).text(`Humidity: ${response.list[x].main.humidity} %`)
+                x = x + 8
+
+                // $('#forecast-icon-i' + i).text('Icon ' + i)
+            }
+
+
+        })
+
+
+    }
+
+    function buildForecast() {
+
+        for (let i = 1; i < 6; i++) {
+            // $(".container").append($("<tr>", { class: "row time-block", id: i }))
+
+            $("#forecast-container").append($("<div>", { class: "col-sm", id: 'day-' + i }))
+            $('#day-' + i).append($('<div>', { class: "card", id: 'card-' + i }))
+            $('#card-' + i).append($('<div>', { class: "card-body", id: "card-body-" + i }))
+            $('#card-body-' + i).append($('<p>', { class: "card-title", id: "forecast-day-" + i }))
+            $('#forecast-day-' + i).text('Day ' + i)
+            $('#card-body-' + i).append($('<p>', { id: "forecast-icon-" + i }))
+            $('#forecast-icon-' + i).text('Icon ' + i)
+            $('#card-body-' + i).append($('<p>', { id: "forecast-temp-" + i }))
+            $('#forecast-temp-' + i).text('Temp: ' + i)
+            $('#card-body-' + i).append($('<p>', { id: "forecast-humidity-" + i }))
+            $('#forecast-humidity-' + i).text('Humidity: ' + i)
+
+        }
+
     }
 
     $('.search').on('click', function (event) {
@@ -70,8 +108,9 @@ $(document).ready(function () {
         loadHistory()
     })
 
-    requestData(userInput)
+
     loadHistory()
-    console.log(window)
+    buildForecast()
+    requestData(userInput)
 
 })

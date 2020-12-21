@@ -2,60 +2,60 @@
 $(document).ready(function () {
 
     console.log('linked!')
-    var userInput = ''
-    var btnBox = $('.button-box')
-    var search = $('.search')
-    var searchHistory = ['Tacoma, Washington', 'Seattle, Washington', 'Honolulu, Hawaii', 'Anaheim, California']
-
+    var userInput = 'Tacoma, Washington'
+    var searchHistory = ['Tacoma, Washington', 'Seattle, Washington', 'Honolulu, Hawaii', 'Anaheim, California', 'Chiang Mai, Thailand']
     var APIkey = '5fb601afb9ee3cc974379d932b3c5bea'
 
-    var curCity = $('#city-name')
-    var curTemp = $('#current-temp')
-    var curHumidity = $('#current-humidity')
-    var curWind = $('#current-wind')
-    var curUv = $('#current-uv-index')
-
     function loadHistory() {
-        btnBox.empty()
-        if (searchHistory[0] !== null)
+        $('#button-bin').empty()
+        $("#button-bin").append($("<p>", { class: "card-title", id: "search-history" }))
+        $('#search-history').text("Search History")
+
+        if (searchHistory[0] !== null) {
+
             for (let i = 0; i < searchHistory.length; i++) {
-                btnBox.append($(`<button class="btn btn-outline-info my-2 my-sm-0 history" value="${searchHistory[i]}" type="submit">${searchHistory[i]}</button>`))
+                $('#button-bin').append($("<button>", { class: "btn btn-outline-light my-2 my-sm-0 history", type: "submit", id: "button-" + i }))
+                $('#button-' + i).text(searchHistory[i])
             }
+        }
+        $("#button-bin").append($('<button>', { class: "btn btn-outline-danger my-2 my-sm-0 clear", type: "submit", id: "undo" }))
+        $("#undo").text('Undo')
+
     }
 
 
-    // requestData()
     var requestData = function () {
         var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${userInput}&units=imperial&appid=${APIkey}`
         var queryURL5Day = `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&units=imperial&appid=${APIkey}`
         var coords = []
 
         $.get(queryURL).then(function (response) {
-
-            curCity.text(response.name)
-            curTemp.text(`Temp: ${response.main.temp} °F`)
-            curHumidity.text(`Humidity: ${response.main.humidity} %`)
-            curWind.text(`Wind: ${response.wind.speed} mph`)
             console.log(response)
 
             var lat = response.coord.lat
             var lon = response.coord.lon
             var queryURLuv = `http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${APIkey}`
+
+            $('#city-header-text').text(userInput)
+            $('#forecast-icon-0').attr('src', `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`)
+            $('#forecast-temp-0').text(`Temp: ${response.main.temp} °F`)
+            $('#forecast-humidity-0').text(`Humidity: ${response.main.humidity} %`)
+            $('#forecast-wind-0').text(`Wind: ${response.wind.speed} mph`)
+
             $.get(queryURLuv).then(function (response) {
-                curUv.text(`uv-index: ${String(response.value)}`)
+                $('#forecast-uv-0').text(`uv-index: ${String(response.value)}`)
             })
         })
         $.get(queryURL5Day).then(function (response) {
-            var x = 2
+            var x = 4
 
             for (let i = 1; i < 6; i++) {
-
-                $('#forecast-day-' + i).text(response.list[x].dt_txt)
+                // $('#forecast-day-' + i).text(response.list[x].dt_txt)
+                $('#forecast-icon-' + i).attr('src', `http://openweathermap.org/img/wn/${response.list[x].weather[0].icon}@2x.png`)
                 $('#forecast-temp-' + i).text(`Temp: ${response.list[x].main.temp} °F`)
                 $('#forecast-humidity-' + i).text(`Humidity: ${response.list[x].main.humidity} %`)
+                $('#forecast-wind-' + i).text(`Wind: ${response.list[x].wind.speed} mph`)
                 x = x + 8
-
-                // $('#forecast-icon-i' + i).text('Icon ' + i)
             }
 
 
@@ -64,25 +64,30 @@ $(document).ready(function () {
 
     }
 
-    function buildForecast() {
+    function buildPage() {
+        $("#forecast-container").append($("<div>", { class: "col-sm", id: "card-history" }))
+        $('#card-history').append($('<div>', { class: "card-header bg-warning text-center", id: "card-header" }))
+        $('#card-header').append($('<p>', { class: "text-dark", id: "city-header-text" }))
+        $("#card-history").append($("<div>", { class: "card", id: "history-buttons" }))
+        $("#history-buttons").append($("<div>", { class: "card-body d-flex flex-column text-center bg-dark text-light", id: "button-bin" }))
 
-        for (let i = 1; i < 6; i++) {
-            // $(".container").append($("<tr>", { class: "row time-block", id: i }))
-
+        for (let i = 0; i < 6; i++) {
             $("#forecast-container").append($("<div>", { class: "col-sm", id: 'day-' + i }))
             $('#day-' + i).append($('<div>', { class: "card", id: 'card-' + i }))
-            $('#card-' + i).append($('<div>', { class: "card-body", id: "card-body-" + i }))
-            $('#card-body-' + i).append($('<p>', { class: "card-title", id: "forecast-day-" + i }))
-            $('#forecast-day-' + i).text('Day ' + i)
-            $('#card-body-' + i).append($('<p>', { id: "forecast-icon-" + i }))
-            $('#forecast-icon-' + i).text('Icon ' + i)
+            $('#card-' + i).append($('<div>', { class: "card-body text-center bg-secondary text-light", id: "card-body-" + i }))
+            $('#card-body-' + i).append($('<p>', { class: "card-title text-center", id: "forecast-day-" + i }))
+            $('#forecast-day-' + i).text(moment().add(i, 'days').format('ddd MMM Do'))
+            $('#card-body-' + i).append($('<img>', { id: "forecast-icon-" + i, alt: "weather icon" }))
             $('#card-body-' + i).append($('<p>', { id: "forecast-temp-" + i }))
-            $('#forecast-temp-' + i).text('Temp: ' + i)
             $('#card-body-' + i).append($('<p>', { id: "forecast-humidity-" + i }))
-            $('#forecast-humidity-' + i).text('Humidity: ' + i)
-
+            $('#card-body-' + i).append($('<p>', { id: "forecast-wind-" + i }))
+            $('#card-body-' + i).append($('<p>', { id: "forecast-uv-" + i }))
         }
-
+        $("#card-body-0").attr('class', "card-body text-center bg-dark text-light")
+        $('#card-0').prepend($('<div>', { class: "card-header bg-success text-light text-center", id: "today" }))
+        $('#today').text('Today')
+        $('#card-1').prepend($('<div>', { class: "card-header bg-primary text-light text-center", id: "5-day-forecast" }))
+        $('#5-day-forecast').text('5 day forecast')
     }
 
     $('.search').on('click', function (event) {
@@ -110,7 +115,8 @@ $(document).ready(function () {
     })
 
 
+    buildPage()
     loadHistory()
-    buildForecast()
+    requestData()
 
 })

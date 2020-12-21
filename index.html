@@ -19,7 +19,6 @@
         <form class="form-inline">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0 search" type="submit">Search</button>
-            <button class="btn btn-outline-danger my-2 my-sm-0 clear" type="submit">Undo</button>
         </form>
         <a class="navbar-brand" href="#">
             <img src="https://www.pngkey.com/png/detail/5-51363_cloud-sun-svg-png-icon-free-download-icon.png"
@@ -27,30 +26,8 @@
             Weather <span id="e">e</span>.Port
         </a>
     </nav>
-    <main class="container-fluid">
-        <div class="row">
-            <div class="col-3 border">
-                <div class="button-box"></div>
-            </div>
-            <div class="col-9 border">
-                <div class="row">
-                    <div class="col-sm city-info border">
-                        <h2><span id="city-name"></span></h2>
-                        <h3><span id="current-temp"></span></h3>
-                        <h3><span id="current-humidity"></span></h3>
-                        <h3><span id="current-wind"></span></h3>
-                        <h3><span id="current-uv-index"></span></h3>
-                    </div>
-                    <div class="col">
-                    </div>
-                </div>
-                <div class="row">
-                    <h2>5-Day Forecast</h2>
-                </div>
-                <div class="row border" id="forecast-container">
-                </div>
-            </div>
-        </div>
+    <main class="container-fluid d-flex align-items-end">
+        <div class="row" id="forecast-container"></div>
     </main>
 
 
@@ -66,6 +43,7 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
     <script src="./Assets/script.js"></script>
 

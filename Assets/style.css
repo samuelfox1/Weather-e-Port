@@ -5,8 +5,8 @@ body{
     color: rgb(245, 235, 98) !important;
 }
 
-button{
-    margin: 1rem !important;
+.btn{
+    margin: .25rem !important;
 }
 .city-info {
     padding: 15px 

@@ -29,6 +29,10 @@ $(document).ready(function () {
         var queryURL5Day = `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&units=imperial&appid=${APIkey}`
         var coords = []
 
+        // $.ajax({
+        //     url: queryURL,
+        //     method: "GET"
+        // }).then(function (response) {
         $.get(queryURL).then(function (response) {
             console.log(response)
 
@@ -51,7 +55,7 @@ $(document).ready(function () {
 
             for (let i = 1; i < 6; i++) {
                 // $('#forecast-day-' + i).text(response.list[x].dt_txt)
-                $('#forecast-icon-' + i).attr('src', `http://openweathermap.org/img/wn/${response.list[x].weather[0].icon}@2x.png`)
+                $('#forecast-icon-' + i).attr('src', `https://openweathermap.org/img/wn/${response.list[x].weather[0].icon}@2x.png`)
                 $('#forecast-temp-' + i).text(`Temp: ${response.list[x].main.temp} °F`)
                 $('#forecast-humidity-' + i).text(`Humidity: ${response.list[x].main.humidity} %`)
                 $('#forecast-wind-' + i).text(`Wind: ${response.list[x].wind.speed} mph`)
